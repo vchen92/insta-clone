@@ -1,22 +1,19 @@
 import './App.css';
 import Post from './components/Post/Post';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import db from './firebase';
 
 function App() {  
-  const [posts, setPosts] = useState([
-		{
-			username: 'vchen92',
-			captions: 'wow it works!!!',
-			imageUrl:
-				'https://miro.medium.com/max/700/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg',
-		},
-		{
-			username: 'sam123',
-			captions: 'cool cool!!!',
-			imageUrl:
-				'https://miro.medium.com/max/700/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg',
-		},
-  ]);
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    db.collection('posts').onSnapshot(snap => {
+      setPosts(snap.docs.map(doc => ({
+        post: doc.data(),
+        id: doc.id
+      })));
+    });
+  }, []);
 
   return (
 		<div className="app">
@@ -27,10 +24,9 @@ function App() {
 				/>
 			</div>
 
-			<h1>Instagram App</h1>
-
-      {posts.map(post => (
+      {posts.map(({post, id}) => (
         <Post
+          key={id}
           username={post.username}
           caption={post.caption}
           imageUrl={post.imageUrl}
