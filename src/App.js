@@ -2,42 +2,14 @@ import './App.css';
 import Post from './components/Post/Post';
 import React, { useState, useEffect } from 'react';
 import db, { auth } from './firebase';
-import Modal from '@material-ui/core/Modal';
-import { makeStyles } from '@material-ui/core/styles';
-import { Button, Input } from '@material-ui/core';
+import { Button } from '@material-ui/core';
+import LoginModal from './components/LoginModal/LoginModal';
 
-function getModalStyle() {
-	const top = 50;
-	const left = 50;
-
-	return {
-		top: `${top}%`,
-		left: `${left}%`,
-		transform: `translate(-${top}%, -${left}%)`,
-	};
-}
-
-const useStyles = makeStyles(theme => ({
-	paper: {
-		position: 'absolute',
-		width: 400,
-		backgroundColor: theme.palette.background.paper,
-		border: '2px solid #000',
-		boxShadow: theme.shadows[5],
-		padding: theme.spacing(2, 4, 3),
-	},
-}));
-
-function App() {  
-  const classes = useStyles();
-  const [modalStyle] = useState(getModalStyle);
-
+function App() {
   const [posts, setPosts] = useState([]);
-  const [open, setOpen] = useState(false);
+  const [openSignUp, setOpenSignUp] = useState(false);
   const [openSignIn, setOpenSignIn] = useState(false);
   const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -72,8 +44,10 @@ function App() {
     });
   }, []);
 
-  const signUp = (event) => {
+  const signUp = (event, email, password, username) => {
+    console.log(email, password, username);
     event.preventDefault();
+    setUsername(username);
 
     auth
       .createUserWithEmailAndPassword(email, password)
@@ -84,14 +58,11 @@ function App() {
       })
       .catch(err => alert(err.message));
 
-    // setUsername('');
-    setEmail('');
-    setPassword('');
-
-    setOpen(false);
+    setOpenSignUp(false);
   }
 
-  const signIn = (event) => {
+  const signIn = (event, email, password) => {
+    console.log(email, password);
     event.preventDefault();
     
     auth
@@ -103,69 +74,19 @@ function App() {
 
   return (
 		<div className="app">
-			<Modal open={open} onClose={() => setOpen(false)}>
-				<div style={modalStyle} className={classes.paper}>
-					<form className="app__signup">
-						<center>
-							<img
-								className="app_headerImage"
-								src="https://instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"
-								alt=""
-							/>
-						</center>
-						<Input
-							placeholder="username"
-							type="text"
-							value={username}
-							onChange={e => setUsername(e.target.value)}
-						/>
-						<Input
-							placeholder="email"
-							type="text"
-							value={email}
-							onChange={e => setEmail(e.target.value)}
-						/>
-						<Input
-							placeholder="password"
-							type="text"
-							value={password}
-							onChange={e => setPassword(e.target.value)}
-						/>
-						<Button type="submit" onClick={signUp}>
-							Sign Up
-						</Button>
-					</form>
-				</div>
-			</Modal>
-
-			<Modal open={openSignIn} onClose={() => setOpenSignIn(false)}>
-				<div style={modalStyle} className={classes.paper}>
-					<form className="app__signup">
-						<center>
-							<img
-								className="app_headerImage"
-								src="https://instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"
-								alt=""
-							/>
-						</center>
-						<Input
-							placeholder="email"
-							type="text"
-							value={email}
-							onChange={e => setEmail(e.target.value)}
-						/>
-						<Input
-							placeholder="password"
-							type="text"
-							value={password}
-							onChange={e => setPassword(e.target.value)}
-						/>
-						<Button type="submit" onClick={signIn}>
-							Sign In
-						</Button>
-					</form>
-				</div>
-			</Modal>
+			<LoginModal
+				text="Sign Up"
+				open={openSignUp}
+				close={setOpenSignUp}
+				action={signUp}
+			/>
+      
+			<LoginModal
+				text="Sign In"
+				open={openSignIn}
+				close={setOpenSignIn}
+				action={signIn}
+			/>
 
 			<div className="app__header">
 				<img
@@ -179,7 +100,7 @@ function App() {
 			) : (
 				<div className="app__loginContainer">
 					<Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
-					<Button onClick={() => setOpen(true)}>Sign Up</Button>
+					<Button onClick={() => setOpenSignUp(true)}>Sign Up</Button>
 				</div>
 			)}
 
