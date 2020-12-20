@@ -76,17 +76,29 @@ function App() {
     event.preventDefault();
 
     auth
-    .createUserWithEmailAndPassword(email, password)
-    .then(authUser => {
-      return authUser.user.updateProfile({
-        displayName: username,
-      });
-    })
-    .catch(err => alert(err.message));
+      .createUserWithEmailAndPassword(email, password)
+      .then(authUser => {
+        return authUser.user.updateProfile({
+          displayName: username,
+        });
+      })
+      .catch(err => alert(err.message));
 
     // setUsername('');
     setEmail('');
     setPassword('');
+
+    setOpen(false);
+  }
+
+  const signIn = (event) => {
+    event.preventDefault();
+    
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .catch(err => alert(err.message));
+
+    setOpenSignIn(false);
   }
 
   return (
@@ -121,6 +133,35 @@ function App() {
 						/>
 						<Button type="submit" onClick={signUp}>
 							Sign Up
+						</Button>
+					</form>
+				</div>
+			</Modal>
+
+			<Modal open={openSignIn} onClose={() => setOpenSignIn(false)}>
+				<div style={modalStyle} className={classes.paper}>
+					<form className="app__signup">
+						<center>
+							<img
+								className="app_headerImage"
+								src="https://instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"
+								alt=""
+							/>
+						</center>
+						<Input
+							placeholder="email"
+							type="text"
+							value={email}
+							onChange={e => setEmail(e.target.value)}
+						/>
+						<Input
+							placeholder="password"
+							type="text"
+							value={password}
+							onChange={e => setPassword(e.target.value)}
+						/>
+						<Button type="submit" onClick={signIn}>
+							Sign In
 						</Button>
 					</form>
 				</div>
