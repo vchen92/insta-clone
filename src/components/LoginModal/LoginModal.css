@@ -2,3 +2,16 @@
   display: flex;
   flex-direction: column;
 }
+
+.loginModal__signup .MuiInput-root {
+  margin-bottom: 15px;
+}
+
+.loginModal_headerImage {
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.loginModal__button {
+  margin-top: 20px !important;
+}

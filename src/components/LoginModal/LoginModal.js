@@ -43,10 +43,12 @@ function LoginModal({open, close, text, action, getModalStyle, classes}) {
 						onChange={e => setPassword(e.target.value)}
 					/>
 					<Button
+            className="loginModal__button"
 						type="submit"
+            disabled={!email || !password}
 						onClick={event =>
 							action(event, email, password, username)
-						}
+            }
 					>
 						{text}
 					</Button>
