@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import db, { auth } from './firebase';
 import { Button } from '@material-ui/core';
 import LoginModal from './components/LoginModal/LoginModal';
+import ImageUpload from './components/ImageUpload/ImageUpload';
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -17,14 +18,6 @@ function App() {
       if (authUser) {
         console.log(authUser);
         setUser(authUser);
-
-        if (authUser.displayName) {
-          
-        } else {
-          return authUser.updateProfile({
-            displayName: username,
-          });
-        }
       } else {
         setUser(null);
       }
@@ -36,7 +29,7 @@ function App() {
   }, [user, username]);
 
   useEffect(() => {
-    db.collection('posts').onSnapshot(snap => {
+    db.collection('posts').orderBy('timestamp', 'desc').onSnapshot(snap => {
       setPosts(snap.docs.map(doc => ({
         post: doc.data(),
         id: doc.id
@@ -45,7 +38,6 @@ function App() {
   }, []);
 
   const signUp = (event, email, password, username) => {
-    console.log(email, password, username);
     event.preventDefault();
     setUsername(username);
 
@@ -62,7 +54,6 @@ function App() {
   }
 
   const signIn = (event, email, password) => {
-    console.log(email, password);
     event.preventDefault();
     
     auth
@@ -74,13 +65,19 @@ function App() {
 
   return (
 		<div className="app">
+			{user?.displayName ? (
+        <ImageUpload username={user.displayName} />
+      ): (
+        <h3>Sorry you need to login to upload</h3>
+      )}
+
 			<LoginModal
 				text="Sign Up"
 				open={openSignUp}
 				close={setOpenSignUp}
 				action={signUp}
 			/>
-      
+
 			<LoginModal
 				text="Sign In"
 				open={openSignIn}
