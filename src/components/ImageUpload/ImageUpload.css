@@ -1,12 +1,52 @@
 .image_upload {
+  position: sticky;
+  bottom: 10px;
+  background-color: white;
+  border-top: 1px solid lightgray;  
+  width: 60%;
   display: flex;
   flex-direction: column;
-  width: 60%;
   margin: 10px auto;
-  background-color: white;
-  border-top: 1px solid lightgray;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 2px 3px 0 0 lightgray;
+}
+
+.image_upload__container {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  margin: 10px auto;
 }
 
 .image_upload__progress {
   width: 100%;
+}
+
+.image_upload__caption {
+  min-height: 30px;
+  margin-top: 10px;
+}
+
+.image_upload__caption:focus {
+  outline: none;
+}
+
+.image_upload__button {
+  border: none;
+  color:#0095F6 !important;
+  background-color: transparent;
+}
+
+.image_upload__button:disabled {
+  color: #B6E1FC !important;
+}
+
+.image_upload__file {
+  margin: 10px auto;
+}
+
+.image_upload__login {
+  text-align: center;
+  padding: 20px;
 }

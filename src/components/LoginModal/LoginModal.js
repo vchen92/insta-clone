@@ -1,34 +1,10 @@
 import React, { useState } from 'react';
 import Modal from '@material-ui/core/Modal';
-import { makeStyles } from '@material-ui/core/styles';
 import { Button, Input } from '@material-ui/core';
 
 import './LoginModal.css';
 
-function getModalStyle() {
-	const top = 50;
-	const left = 50;
-
-	return {
-		top: `${top}%`,
-		left: `${left}%`,
-		transform: `translate(-${top}%, -${left}%)`,
-	};
-}
-
-const useStyles = makeStyles(theme => ({
-	paper: {
-		position: 'absolute',
-		width: 400,
-		backgroundColor: theme.palette.background.paper,
-		border: '2px solid #000',
-		boxShadow: theme.shadows[5],
-		padding: theme.spacing(2, 4, 3),
-	},
-}));
-
-function LoginModal({open, close, text, action}) {  
-  const classes = useStyles();
+function LoginModal({open, close, text, action, getModalStyle, classes}) {  
   const [modalStyle] = useState(getModalStyle);
 
   const [username, setUsername] = useState('');

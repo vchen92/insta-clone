@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { Button } from '@material-ui/core';
 import { db, storage } from '../../firebase';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 
 import './ImageUpload.css';
 
 function ImageUpload({ username }) {
   const [caption, setCaption] = useState('');
   const [image, setImage] = useState('');
-  const [progress, setProgress] = useState('');
-  const [url, setUrl] = useState('');
+  const [progress, setProgress] = useState(0);
 
   const handleFileChange = (e) => {
     if (e.target.files[0]) {
@@ -51,23 +50,36 @@ function ImageUpload({ username }) {
     )
   }
 
-  return (
+  return username ? (
 		<div className="image_upload">
-      <progress className="image_upload__progress" value={progress} max="100" />
-
-      <input 
-        type="text" 
-        placeholder="Enter a caption..." 
-        value={caption} 
-        onChange={(e) => setCaption(e.target.value)} 
+      <progress
+        className="image_upload__progress"
+        value={progress}
+        max="100"
+      />
+      <input
+        className="image_upload__caption"
+        type="text"
+        placeholder="Enter a caption..."
+        value={caption}
+        onChange={e => setCaption(e.target.value)}
       />
       <input 
+        className="image_upload__file"
+        key={image || ''}
         type="file" 
-        onChange={handleFileChange} 
-      />
+        onChange={(e) => handleFileChange(e)} />
 
-      <Button onClick={handleUpload}>Upload</Button>
+      <Button 
+        className="image_upload__button" 
+        onClick={handleUpload}
+        disabled={!image}
+      >Upload</Button>			
 		</div>
+  ) : (
+		<div className="image_upload__login">
+      <h3>Please login to post a picture!</h3>
+    </div>
   );
 }
 

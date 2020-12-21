@@ -1,11 +1,34 @@
 import './App.css';
 import Post from './components/Post/Post';
 import React, { useState, useEffect } from 'react';
-import db, { auth } from './firebase';
+import { db, auth } from './firebase';
 import { Button } from '@material-ui/core';
 import LoginModal from './components/LoginModal/LoginModal';
 import ImageUpload from './components/ImageUpload/ImageUpload';
 import InstagramEmbed from 'react-instagram-embed';
+import { makeStyles } from '@material-ui/core/styles';
+
+function getModalStyle() {
+	const top = 50;
+	const left = 50;
+
+	return {
+		top: `${top}%`,
+		left: `${left}%`,
+		transform: `translate(-${top}%, -${left}%)`,
+	};
+}
+
+const useStyles = makeStyles(theme => ({
+	paper: {
+		position: 'absolute',
+		width: 400,
+		backgroundColor: theme.palette.background.paper,
+		border: '2px solid #000',
+		boxShadow: theme.shadows[5],
+		padding: theme.spacing(2, 4, 3),
+	},
+}));
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -16,12 +39,7 @@ function App() {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
-      if (authUser) {
-        console.log(authUser);
-        setUser(authUser);
-      } else {
-        setUser(null);
-      }
+      setUser(authUser || null);
     });
 
     return () => {
@@ -71,6 +89,8 @@ function App() {
 				open={openSignUp}
 				close={setOpenSignUp}
 				action={signUp}
+				getModalStyle={getModalStyle}
+				classes={useStyles()}
 			/>
 
 			<LoginModal
@@ -78,6 +98,8 @@ function App() {
 				open={openSignIn}
 				close={setOpenSignIn}
 				action={signIn}
+				getModalStyle={getModalStyle}
+				classes={useStyles()}
 			/>
 
 			<div className="app__header">
@@ -104,8 +126,9 @@ function App() {
 				<div className="app__postsLeft">
 					{posts.map(({ post, id }) => (
 						<Post
-              key={id}
-              postId={id}
+							key={id}
+							postId={id}
+							user={user}
 							username={post.username}
 							caption={post.caption}
 							imageUrl={post.imageUrl}
@@ -114,6 +137,7 @@ function App() {
 				</div>
 				<div className="app__postsRight">
 					<InstagramEmbed
+            className="app__instaPost"
 						url="https://www.instagram.com/p/CDh0Ls1gvbP/"
 						clientAccessToken="724145225204709|6446aa760ce323aa04b6bb6dd1e02159"
 						maxWidth={320}
@@ -129,11 +153,7 @@ function App() {
 				</div>
 			</div>
 
-			{user?.displayName ? (
-				<ImageUpload username={user.displayName} />
-			) : (
-				<h3>Sorry you need to login to upload</h3>
-			)}
+			<ImageUpload username={user?.displayName} />
 		</div>
   );
 }

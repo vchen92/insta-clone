@@ -13,7 +13,9 @@
   border-bottom: 1px solid lightgray;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .app__headerImage {
@@ -28,4 +30,9 @@
 
 .app__postsRight {
   margin-left: 20px;
+}
+
+.app__instaPost {
+  position: sticky;
+  top: 97px;
 }

@@ -26,3 +26,40 @@
 .post__avatar {
   margin-right: 10px;  
 }
+
+.post__commentBox {
+  display: flex;
+  margin-top: 10px;  
+  border-top: 1px solid lightgray;
+}
+
+.post__input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 5px;  
+  border-color: transparent;
+}
+
+.post__input:focus {
+  outline: none;
+}
+
+.post__button {
+  flex: 0;
+  border: none;
+  color:#0095F6 !important;
+  background-color: transparent;
+}
+
+.post__button:disabled {
+  color: #B6E1FC !important
+}
+
+.post__comments {
+  padding: 20px;
+}
+
+.post__login {
+  padding: 20px;
+  color: #989898;
+}
