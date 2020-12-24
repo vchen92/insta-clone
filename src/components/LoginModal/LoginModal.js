@@ -58,4 +58,4 @@ function LoginModal({open, close, text, action, getModalStyle, classes}) {
   );
 }
 
-export default LoginModal
+export default LoginModal;
